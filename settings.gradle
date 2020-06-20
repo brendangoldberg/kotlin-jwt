@@ -1,0 +1,3 @@
+include ":lib", ":examples"
+rootProject.name = "kotlin-jwt"
+
