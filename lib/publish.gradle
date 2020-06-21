@@ -1,0 +1,40 @@
+apply plugin: "maven-publish"
+apply plugin: "com.jfrog.bintray"
+
+def propertiesFile = rootProject.file("local.properties")
+def properties = new Properties()
+properties.load(new FileInputStream(propertiesFile))
+
+publishing {
+    publications {
+        Production(MavenPublication) {
+            from components.java
+            groupId "com.brendangoldberg"
+            artifactId "kotlin-jwt"
+            version this.version
+        }
+    }
+}
+
+bintray {
+    user = properties.get("BINTRAY_USER")
+    key = properties.get("BINTRAY_API_KEY")
+    publications = ["Production"]
+    pkg {
+        dryRun = true
+        publish = true
+        override = false
+        configurations = ['archives']
+        repo = "com.brendangoldberg"
+        name = "kotlin-jwt"
+        description = "JWT creation library written in Kotlin"
+        licenses = ["Apache-2.0"]
+        vcsUrl = "https://github.com/BrendanOswego/kotlin-jwt.git"
+        version {
+            name = this.version
+            desc = "JWT creation library written in Kotlin"
+            released = new Date()
+            vcsTag = this.version
+        }
+    }
+}

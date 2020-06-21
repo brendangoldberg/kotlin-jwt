@@ -9,7 +9,9 @@ buildscript {
     dependencies {
         classpath deps.kotlin.gradle
         classpath deps.kotlin.serialization.gradle
+        classpath deps.shadow
         classpath deps.dokka
+        classpath deps.bintray
     }
 
 }
