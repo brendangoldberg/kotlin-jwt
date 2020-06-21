@@ -21,7 +21,7 @@ bintray {
     key = properties.get("BINTRAY_API_KEY")
     publications = ["Production"]
     pkg {
-        dryRun = true
+        dryRun = false
         publish = true
         override = false
         configurations = ['archives']
