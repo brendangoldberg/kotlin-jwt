@@ -6,19 +6,18 @@ import com.brendangoldberg.kotlin_jwt.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.list
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.toUtf8Bytes
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.HashMap
+import kotlin.collections.LinkedHashMap
 
 /**
  * Main class for creating JWT tokens.
  */
-class KtJwt private constructor() {
+class KtJwtCreator private constructor() {
 
     companion object {
         private val S_STRING = String.serializer()
@@ -28,9 +27,9 @@ class KtJwt private constructor() {
         private val S_INT = Int.serializer()
         private val S_BOOLEAN = Boolean.serializer()
 
-        private val encoder = Base64.getUrlEncoder().withoutPadding()
+        private val encoder = Utils.ENCODER
 
-        private val json = Json(JsonConfiguration.Stable)
+        private val json = Utils.JSON
 
         /**
          * Initializes a [Builder] instance.
@@ -72,26 +71,29 @@ class KtJwt private constructor() {
         }
     }
 
-    private val headers = HashMap<String, JsonElement>()
-    private val payload = HashMap<String, JsonElement>()
+    private val header = LinkedHashMap<String, JsonElement>()
+    private val payload = LinkedHashMap<String, JsonElement>()
 
     private fun sign(algorithm: Algorithm): String {
-        headers.putIfAbsent(Constants.ALGORITHM, algorithm.id.toJson())
+        header.putIfAbsent(Constants.ALGORITHM, algorithm.id.toJson())
 
-        val headersJson = JsonObject(headers).toString()
+        val headerJson = JsonObject(header).toString()
         val payloadJson = JsonObject(payload).toString()
 
-        val tHeaders = encoder.encodeToString(headersJson.toUtf8Bytes())
-        val tPayload = encoder.encodeToString(payloadJson.toUtf8Bytes())
+        val headerBytes = headerJson.toUtf8Bytes()
+        val payloadBytes = payloadJson.toUtf8Bytes()
 
-        val signature = encoder.encodeToString(algorithm.sign(tHeaders, tPayload))
+        val tHeader = encoder.encodeToString(headerBytes)
+        val tPayload = encoder.encodeToString(payloadBytes)
 
-        return "$tHeaders.$tPayload.$signature".trimEnd('=')
+        val signature = algorithm.sign(headerJson, payloadJson)
+
+        return "$tHeader.$tPayload.$signature"
     }
 
     class Builder {
 
-        private val jwt = KtJwt()
+        private val jwt = KtJwtCreator()
 
         /**
          * Adds item to JWT payload.
@@ -201,8 +203,8 @@ class KtJwt private constructor() {
          *
          * @return  The [Builder] instance.
          */
-        fun setAudience(vararg values: String) {
-            jwt.headers.putIfAbsent(Constants.AUDIENCE, values.toList().toJson())
+        fun setAudience(vararg values: String) = this.apply {
+            jwt.payload.putIfAbsent(Constants.AUDIENCE, values.toList().toJson())
         }
 
         /**
@@ -271,6 +273,19 @@ class KtJwt private constructor() {
         }
 
         /**
+         * Set JWT issued at "iat" from epoch second.
+         *
+         * @param value The JWT issued at to set.
+         *
+         * @see <a href="https://tools.ietf.org/html/rfc7519#section-4.1.6">RFC-7519</a>
+         *
+         * @return  The [Builder] instance.
+         */
+        fun setIssuedAt(epochSecond: Long) = this.apply {
+            jwt.payload.putIfAbsent(Constants.ISSUED_AT, epochSecond.toJson())
+        }
+
+        /**
          * Set JWT issued at "iat".
          *
          * @param value The JWT issued at to set.
@@ -297,6 +312,19 @@ class KtJwt private constructor() {
         }
 
         /**
+         * Set JWT type "alg".
+         *
+         * @param value The JWT algorithm to set. Defaults to the provided [Algorithm] if none set.
+         *
+         * @see <a href="https://tools.ietf.org/html/rfc7519#section-5.1">RFC-7519</a>
+         *
+         * @return  The [Builder] instance.
+         */
+        fun setAlgorithm(value: String) = this.apply {
+            jwt.header.putIfAbsent(Constants.ALGORITHM, value.toJson())
+        }
+
+        /**
          * Set JWT type "typ".
          *
          * @param value The JWT type to set.
@@ -305,8 +333,8 @@ class KtJwt private constructor() {
          *
          * @return  The [Builder] instance.
          */
-        fun setType(value: String) {
-            jwt.headers.putIfAbsent(Constants.TYPE, value.toJson())
+        fun setType(value: String) = this.apply {
+            jwt.header.putIfAbsent(Constants.TYPE, value.toJson())
         }
 
         /**
@@ -318,8 +346,8 @@ class KtJwt private constructor() {
          *
          * @return  The [Builder] instance.
          */
-        fun setContentType(value: String) {
-            jwt.headers.putIfAbsent(Constants.CONTENT_TYPE, value.toJson())
+        fun setContentType(value: String) = this.apply {
+            jwt.header.putIfAbsent(Constants.CONTENT_TYPE, value.toJson())
         }
 
         /**

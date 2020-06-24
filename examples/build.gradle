@@ -2,6 +2,7 @@ buildscript {
     apply from: "../dependencies.gradle"
 
     repositories {
+        jcenter()
         mavenCentral()
     }
 
@@ -11,10 +12,11 @@ buildscript {
 }
 
 apply plugin: "kotlin"
+apply plugin: "kotlinx-serialization"
 
 repositories {
-    mavenCentral()
     jcenter()
+    mavenCentral()
 }
 
 compileKotlin {
@@ -26,5 +28,7 @@ compileTestKotlin {
 }
 
 dependencies {
+    implementation "com.brendangoldberg:kotlin-jwt:0.2.0"
     implementation deps.kotlin.jdk
+    implementation deps.kotlin.serialization.runtime
 }

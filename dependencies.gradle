@@ -6,6 +6,8 @@ ext {
     bintray = "1.8.5"
     shadow = "6.0.0"
 
+    jupiter = "5.6.2"
+    truth = "1.0.1"
 }
 
 def deps = [:]
@@ -22,5 +24,9 @@ deps.dokka = "org.jetbrains.dokka:dokka-gradle-plugin:$dokka"
 deps.bintray = "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintray"
 
 deps.shadow = "com.github.jengelman.gradle.plugins:shadow:$shadow"
+
+deps.jupiter = "org.junit.jupiter:junit-jupiter:$jupiter"
+
+deps.truth = "com.google.truth:truth:$truth"
 
 ext.deps = deps

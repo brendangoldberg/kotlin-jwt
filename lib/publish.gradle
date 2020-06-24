@@ -7,11 +7,27 @@ properties.load(new FileInputStream(propertiesFile))
 
 publishing {
     publications {
-        Production(MavenPublication) {
+        MyPublication(MavenPublication) {
             from components.java
-            groupId "com.brendangoldberg"
             artifactId "kotlin-jwt"
-            version this.version
+            pom {
+                name = "kotlin-jwt"
+                description = "JWT creation library for Kotlin"
+                url = "https://github.com/BrendanOswego/kotlin-jwt"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "brendangoldberg"
+                        name = "Brendan Goldberg"
+                        email = "goldberg.brendan@gmail.com"
+                    }
+                }
+            }
         }
     }
 }
@@ -19,12 +35,11 @@ publishing {
 bintray {
     user = properties.get("BINTRAY_USER")
     key = properties.get("BINTRAY_API_KEY")
-    publications = ["Production"]
+    publications = ["MyPublication"]
     pkg {
         dryRun = false
         publish = true
         override = false
-        configurations = ['archives']
         repo = "com.brendangoldberg"
         name = "kotlin-jwt"
         description = "JWT creation library written in Kotlin"

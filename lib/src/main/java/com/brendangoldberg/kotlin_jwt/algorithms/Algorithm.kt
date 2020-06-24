@@ -13,14 +13,16 @@ interface Algorithm {
     val id: String
 
     /**
-     * Attempts to create a signature given an encoded header, and payload.
+     * Attempts to create a signature given JWT header, and payload.
      *
-     * @param encodedHeader     The Base64 URL encoded header.
-     * @param encodedPayload    The Base64 URL encoded payload.
+     * @param header    The JWT header.
+     * @param payload   The JWT payload.
      *
      * @see <a href = "https://jwt.io/introduction/">JWT Introduction</a>
      *
      * @return The signature.
      */
-    fun sign(encodedHeader: String, encodedPayload: String): ByteArray
+    fun sign(header: String, payload: String): String
+
+    fun verify(header: String, payload: String, signature: String): Boolean
 }
