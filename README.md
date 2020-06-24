@@ -22,7 +22,7 @@ data class CustomClaim(
 )
 
 fun main() {
-    // Declare which signing algorithm to use see import com.brendangoldberg.kotlin_jwt.algorithms.* for available algorithms.
+    // Declare which signing algorithm to use see com.brendangoldberg.kotlin_jwt.algorithms.* for available algorithms.
     val algorithm = HSAlgorithm.HS256("my-super-secret")
 
     val customClaim = CustomClaim("myCustomClaim")
