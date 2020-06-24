@@ -1,14 +1,21 @@
 ## Kotlin JWT Library
-This is a library written fully in Kotlin utilizing [Kotlin Serializer](https://github.com/Kotlin/kotlinx.serialization)
+
+[ ![Download](https://api.bintray.com/packages/brendangoldberg/com.brendangoldberg/kotlin-jwt/images/download.svg) ](https://bintray.com/brendangoldberg/com.brendangoldberg/kotlin-jwt/_latestVersion)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+This is a JSON Web Token (JWT) library written fully in Kotlin utilizing [Kotlin Serializer](https://github.com/Kotlin/kotlinx.serialization).
+
+For introduction to JWTs please visit [https://jwt.io/introduction/](https://jwt.io/introduction/).
 
 ### Features
 
-- Create, decode and verify a JWT
-- Custom claims using [Kotlin Serializer](https://github.com/Kotlin/kotlinx.serialization)
+- Create, decode and verify a JWT.
+- Fully custom JWT claims using [Kotlin Serializer](https://github.com/Kotlin/kotlinx.serialization).
 
 ### Examples
 
 ```kotlin
+
 @Serializable
 data class CustomClaim(
     @SerialName("my_custom_value") val customValue: String
@@ -39,6 +46,7 @@ fun main() {
 ### Setup
 
 #### Gradle
+
 ```
 repositories {
     // published to JCenter
@@ -49,3 +57,7 @@ dependencies {
     implementation "com.brendangoldberg.kotlin-jwt:<latest-version>"
 }
 ```
+
+### Important Notes
+
+- This library is still in pre-release mode, and should not be used in production until release tag's are not marked as "pre-release".
