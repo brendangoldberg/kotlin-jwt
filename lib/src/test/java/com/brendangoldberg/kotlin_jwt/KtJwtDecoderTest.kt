@@ -5,6 +5,7 @@ import com.brendangoldberg.kotlin_jwt.ext.toDate
 import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -33,6 +34,7 @@ class KtJwtDecoderTest {
         val issuedAt = LocalDateTime.now()
         val jwtId = "somejwtid"
         val customClaim = CustomClaim("somevalue")
+        val primitiveClaim = 1
 
         // When
         val jwt = KtJwtCreator.init()
@@ -44,6 +46,7 @@ class KtJwtDecoderTest {
             .setIssuedAt(issuedAt)
             .setJwtId(jwtId)
             .addClaim("custom_claim", customClaim, CustomClaim.serializer())
+            .addClaim("primitive_claim", primitiveClaim, Int.serializer())
             .sign(algorithm)
 
         decoder.decode(jwt)
@@ -57,6 +60,7 @@ class KtJwtDecoderTest {
         assertThat(decoder.issuedAt).isEqualTo(issuedAt.toDate())
         assertThat(decoder.jwtId).isEqualTo(jwtId)
         assertThat(decoder.getClaim("custom_claim", CustomClaim.serializer())).isEqualTo(customClaim)
+        assertThat(decoder.getClaim("primitive_claim", Int.serializer())).isEqualTo(primitiveClaim)
 
     }
 
@@ -73,6 +77,7 @@ class KtJwtDecoderTest {
         val issuedAt = LocalDateTime.now()
         val jwtId = "somejwtid"
         val customClaim = CustomClaim("somevalue")
+        val primitiveClaim = 1
 
         // When
         val jwt = KtJwtCreator.init()
@@ -84,6 +89,7 @@ class KtJwtDecoderTest {
             .setIssuedAt(issuedAt)
             .setJwtId(jwtId)
             .addClaim("custom_claim", customClaim, CustomClaim.serializer())
+            .addClaim("primitive_claim", primitiveClaim, Int.serializer())
             .sign(algorithm)
 
         decoder.decode(jwt)
@@ -97,6 +103,7 @@ class KtJwtDecoderTest {
         assertThat(decoder.issuedAt).isEqualTo(issuedAt.toDate())
         assertThat(decoder.jwtId).isEqualTo(jwtId)
         assertThat(decoder.getClaim("custom_claim", CustomClaim.serializer())).isEqualTo(customClaim)
+        assertThat(decoder.getClaim("primitive_claim", Int.serializer())).isEqualTo(primitiveClaim)
 
     }
 
@@ -113,6 +120,7 @@ class KtJwtDecoderTest {
         val issuedAt = LocalDateTime.now()
         val jwtId = "somejwtid"
         val customClaim = CustomClaim("somevalue")
+        val primitiveClaim = 1
 
         // When
         val jwt = KtJwtCreator.init()
@@ -124,6 +132,7 @@ class KtJwtDecoderTest {
             .setIssuedAt(issuedAt)
             .setJwtId(jwtId)
             .addClaim("custom_claim", customClaim, CustomClaim.serializer())
+            .addClaim("primitive_claim", primitiveClaim, Int.serializer())
             .sign(algorithm)
 
         decoder.decode(jwt)
@@ -137,6 +146,8 @@ class KtJwtDecoderTest {
         assertThat(decoder.issuedAt).isEqualTo(issuedAt.toDate())
         assertThat(decoder.jwtId).isEqualTo(jwtId)
         assertThat(decoder.getClaim("custom_claim", CustomClaim.serializer())).isEqualTo(customClaim)
+        assertThat(decoder.getClaim("primitive_claim", Int.serializer())).isEqualTo(primitiveClaim)
+
     }
 
     @Serializable

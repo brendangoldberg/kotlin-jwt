@@ -60,7 +60,7 @@ class KtJwtDecoder {
 
     fun <T> getClaim(key: String, serializer: KSerializer<T>): T? {
         try {
-            val item = payload[key]?.jsonObject
+            val item = payload[key]
             if (item != null) {
                 return json.fromJson(serializer, item)
             }
