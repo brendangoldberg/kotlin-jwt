@@ -13,7 +13,7 @@ publishing {
             pom {
                 name = "kotlin-jwt"
                 description = "JWT creation library for Kotlin"
-                url = "https://github.com/BrendanOswego/kotlin-jwt"
+                url = "https://github.com/brendangoldberg/kotlin-jwt"
                 licenses {
                     license {
                         name = "The Apache License, Version 2.0"
@@ -44,7 +44,7 @@ bintray {
         name = "kotlin-jwt"
         description = "JWT creation library written in Kotlin"
         licenses = ["Apache-2.0"]
-        vcsUrl = "https://github.com/BrendanOswego/kotlin-jwt.git"
+        vcsUrl = "https://github.com/brendangoldberg/kotlin-jwt.git"
         version {
             name = this.version
             desc = "JWT creation library written in Kotlin"
