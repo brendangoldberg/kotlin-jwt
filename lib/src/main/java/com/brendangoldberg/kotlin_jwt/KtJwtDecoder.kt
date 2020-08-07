@@ -1,136 +1,89 @@
 package com.brendangoldberg.kotlin_jwt
 
 import com.brendangoldberg.kotlin_jwt.ext.toDate
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
 import java.time.DateTimeException
 import java.time.Instant
 import java.time.LocalDateTime
 import java.util.*
 
-class KtJwtDecoder {
+object KtJwtDecoder {
 
-    companion object {
-        private val json = Utils.JSON
-        private val decoder = Utils.DECODER
-    }
+    @JvmField
+    internal val json = Utils.JSON
 
-    var issuer: String? = null
-    var subject: String? = null
-    var audience: List<String>? = null
-    var expiresAt: Date? = null
-    var notBefore: Date? = null
-    var issuedAt: Date? = null
-    var jwtId: String? = null
+    @JvmField
+    internal val decoder = Utils.DECODER
 
-    // Header
-    var alg: String? = null
-    var type: String? = null
-    var contentType: String? = null
-
-    private var header: JsonObject = JsonObject(emptyMap())
-    private var payload: JsonObject = JsonObject(emptyMap())
-    private var signature: String? = null
-
-    fun decode(jwt: String) = this.apply {
-        clear()
+    @JvmStatic
+    fun decode(jwt: String): KtJwt {
         val parts = jwt.split(".")
         val strHeader = String(decoder.decode(parts[0]))
         val strPayload = String(decoder.decode(parts[1]))
-        header = json.parseJson(strHeader).jsonObject
-        payload = json.parseJson(strPayload).jsonObject
-        signature = parts[2]
-        unwrapHeader()
-        unwrapPayload()
-    }
+        val header = json.parseJson(strHeader).jsonObject
+        val payload = json.parseJson(strPayload).jsonObject
 
-    fun clear() {
-        issuer = null
-        subject = null
-        audience = null
-        expiresAt = null
-        notBefore = null
-        issuedAt = null
-        jwtId = null
-        alg = null
-        type = null
-        contentType = null
-    }
+        return KtJwt().apply {
+            this.header = header
+            this.payload = payload
 
-    fun <T> getClaim(key: String, serializer: KSerializer<T>): T? {
-        try {
-            val item = payload[key]
-            if (item != null) {
-                return json.fromJson(serializer, item)
+            with(header) {
+                alg = this[Constants.ALGORITHM]?.contentOrNull
+                type = this[Constants.TYPE]?.contentOrNull
+                contentType = this[Constants.CONTENT_TYPE]?.contentOrNull
             }
-            return null
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
-        }
-    }
+            with(payload) {
+                issuer = this[Constants.ISSUER]?.contentOrNull
+                subject = this[Constants.SUBJECT]?.contentOrNull
 
-    private fun unwrapHeader() {
-        with(header) {
-            alg = this[Constants.ALGORITHM]?.contentOrNull
-            type = this[Constants.TYPE]?.contentOrNull
-            contentType = this[Constants.CONTENT_TYPE]?.contentOrNull
-        }
-    }
-
-    private fun unwrapPayload() {
-        with(payload) {
-            issuer = this[Constants.ISSUER]?.contentOrNull
-            subject = this[Constants.SUBJECT]?.contentOrNull
-
-            this[Constants.AUDIENCE]?.jsonArray?.let {
-                val audiences = ArrayList<String>()
-                for (item in it) {
-                    item.contentOrNull?.let { t ->
-                        audiences.add(t)
+                this[Constants.AUDIENCE]?.jsonArray?.let {
+                    val audiences = ArrayList<String>()
+                    for (item in it) {
+                        item.contentOrNull?.let { t ->
+                            audiences.add(t)
+                        }
                     }
+                    audience = audiences
                 }
-                audience = audiences
-            }
 
-            this[Constants.EXPIRES_AT]?.contentOrNull?.let { text ->
-                try {
-                    expiresAt = LocalDateTime.parse(text).toDate()
-                } catch (e: DateTimeException) {
+                this[Constants.EXPIRES_AT]?.contentOrNull?.let { text ->
                     try {
-                        expiresAt = Date.from(Instant.parse(text))
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                        expiresAt = LocalDateTime.parse(text).toDate()
+                    } catch (e: DateTimeException) {
+                        try {
+                            expiresAt = Date.from(Instant.parse(text))
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
                 }
-            }
 
-            this[Constants.NOT_BEFORE]?.contentOrNull?.let { text ->
-                try {
-                    notBefore = LocalDateTime.parse(text).toDate()
-                } catch (e: DateTimeException) {
+                this[Constants.NOT_BEFORE]?.contentOrNull?.let { text ->
                     try {
-                        notBefore = Date.from(Instant.parse(text))
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                        notBefore = LocalDateTime.parse(text).toDate()
+                    } catch (e: DateTimeException) {
+                        try {
+                            notBefore = Date.from(Instant.parse(text))
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
                 }
-            }
 
-            this[Constants.ISSUED_AT]?.contentOrNull?.let { text ->
-                try {
-                    issuedAt = LocalDateTime.parse(text).toDate()
-                } catch (e: DateTimeException) {
+                this[Constants.ISSUED_AT]?.contentOrNull?.let { text ->
                     try {
-                        issuedAt = Date.from(Instant.parse(text))
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                        issuedAt = LocalDateTime.parse(text).toDate()
+                    } catch (e: DateTimeException) {
+                        try {
+                            issuedAt = Date.from(Instant.parse(text))
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
                 }
-            }
 
-            jwtId = this[Constants.JWT_ID]?.contentOrNull
+                jwtId = this[Constants.JWT_ID]?.contentOrNull
+            }
         }
     }
 

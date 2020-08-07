@@ -6,20 +6,12 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
 class KtJwtDecoderTest {
 
     private val secret = "supersecret"
-
-    private lateinit var decoder: KtJwtDecoder
-
-    @BeforeEach
-    fun setup() {
-        decoder = KtJwtDecoder()
-    }
 
     @Test
     fun `should decode HS256 token`() {
@@ -49,18 +41,18 @@ class KtJwtDecoderTest {
             .addClaim("primitive_claim", primitiveClaim, Int.serializer())
             .sign(algorithm)
 
-        decoder.decode(jwt)
+        val decoded = KtJwtDecoder.decode(jwt)
 
         // Then
-        assertThat(decoder.issuer).isEqualTo(issuer)
-        assertThat(decoder.subject).isEqualTo(subject)
-        assertThat(decoder.audience).isEqualTo(audience)
-        assertThat(decoder.expiresAt).isEqualTo(expiresAt.toDate())
-        assertThat(decoder.notBefore).isEqualTo(notBefore.toDate())
-        assertThat(decoder.issuedAt).isEqualTo(issuedAt.toDate())
-        assertThat(decoder.jwtId).isEqualTo(jwtId)
-        assertThat(decoder.getClaim("custom_claim", CustomClaim.serializer())).isEqualTo(customClaim)
-        assertThat(decoder.getClaim("primitive_claim", Int.serializer())).isEqualTo(primitiveClaim)
+        assertThat(decoded.issuer).isEqualTo(issuer)
+        assertThat(decoded.subject).isEqualTo(subject)
+        assertThat(decoded.audience).isEqualTo(audience)
+        assertThat(decoded.expiresAt).isEqualTo(expiresAt.toDate())
+        assertThat(decoded.notBefore).isEqualTo(notBefore.toDate())
+        assertThat(decoded.issuedAt).isEqualTo(issuedAt.toDate())
+        assertThat(decoded.jwtId).isEqualTo(jwtId)
+        assertThat(decoded.getClaim("custom_claim", CustomClaim.serializer())).isEqualTo(customClaim)
+        assertThat(decoded.getClaim("primitive_claim", Int.serializer())).isEqualTo(primitiveClaim)
 
     }
 
@@ -92,18 +84,18 @@ class KtJwtDecoderTest {
             .addClaim("primitive_claim", primitiveClaim, Int.serializer())
             .sign(algorithm)
 
-        decoder.decode(jwt)
+        val decoded = KtJwtDecoder.decode(jwt)
 
         // Then
-        assertThat(decoder.issuer).isEqualTo(issuer)
-        assertThat(decoder.subject).isEqualTo(subject)
-        assertThat(decoder.audience).isEqualTo(audience)
-        assertThat(decoder.expiresAt).isEqualTo(expiresAt.toDate())
-        assertThat(decoder.notBefore).isEqualTo(notBefore.toDate())
-        assertThat(decoder.issuedAt).isEqualTo(issuedAt.toDate())
-        assertThat(decoder.jwtId).isEqualTo(jwtId)
-        assertThat(decoder.getClaim("custom_claim", CustomClaim.serializer())).isEqualTo(customClaim)
-        assertThat(decoder.getClaim("primitive_claim", Int.serializer())).isEqualTo(primitiveClaim)
+        assertThat(decoded.issuer).isEqualTo(issuer)
+        assertThat(decoded.subject).isEqualTo(subject)
+        assertThat(decoded.audience).isEqualTo(audience)
+        assertThat(decoded.expiresAt).isEqualTo(expiresAt.toDate())
+        assertThat(decoded.notBefore).isEqualTo(notBefore.toDate())
+        assertThat(decoded.issuedAt).isEqualTo(issuedAt.toDate())
+        assertThat(decoded.jwtId).isEqualTo(jwtId)
+        assertThat(decoded.getClaim("custom_claim", CustomClaim.serializer())).isEqualTo(customClaim)
+        assertThat(decoded.getClaim("primitive_claim", Int.serializer())).isEqualTo(primitiveClaim)
 
     }
 
@@ -135,18 +127,18 @@ class KtJwtDecoderTest {
             .addClaim("primitive_claim", primitiveClaim, Int.serializer())
             .sign(algorithm)
 
-        decoder.decode(jwt)
+        val decoded = KtJwtDecoder.decode(jwt)
 
         // Then
-        assertThat(decoder.issuer).isEqualTo(issuer)
-        assertThat(decoder.subject).isEqualTo(subject)
-        assertThat(decoder.audience).isEqualTo(audience)
-        assertThat(decoder.expiresAt).isEqualTo(expiresAt.toDate())
-        assertThat(decoder.notBefore).isEqualTo(notBefore.toDate())
-        assertThat(decoder.issuedAt).isEqualTo(issuedAt.toDate())
-        assertThat(decoder.jwtId).isEqualTo(jwtId)
-        assertThat(decoder.getClaim("custom_claim", CustomClaim.serializer())).isEqualTo(customClaim)
-        assertThat(decoder.getClaim("primitive_claim", Int.serializer())).isEqualTo(primitiveClaim)
+        assertThat(decoded.issuer).isEqualTo(issuer)
+        assertThat(decoded.subject).isEqualTo(subject)
+        assertThat(decoded.audience).isEqualTo(audience)
+        assertThat(decoded.expiresAt).isEqualTo(expiresAt.toDate())
+        assertThat(decoded.notBefore).isEqualTo(notBefore.toDate())
+        assertThat(decoded.issuedAt).isEqualTo(issuedAt.toDate())
+        assertThat(decoded.jwtId).isEqualTo(jwtId)
+        assertThat(decoded.getClaim("custom_claim", CustomClaim.serializer())).isEqualTo(customClaim)
+        assertThat(decoded.getClaim("primitive_claim", Int.serializer())).isEqualTo(primitiveClaim)
 
     }
 
