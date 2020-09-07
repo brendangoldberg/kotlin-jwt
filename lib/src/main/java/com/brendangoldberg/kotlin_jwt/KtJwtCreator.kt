@@ -4,14 +4,13 @@ import com.brendangoldberg.kotlin_jwt.algorithms.Algorithm
 import com.brendangoldberg.kotlin_jwt.serializers.DateSerializer
 import com.brendangoldberg.kotlin_jwt.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.list
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.toUtf8Bytes
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.collections.LinkedHashMap
 
 /**
@@ -21,7 +20,7 @@ class KtJwtCreator private constructor() {
 
     companion object {
         private val S_STRING = String.serializer()
-        private val S_STRING_LIST = String.serializer().list
+        private val S_STRING_LIST = ListSerializer(String.serializer())
         private val S_DOUBLE = Double.serializer()
         private val S_LONG = Long.serializer()
         private val S_INT = Int.serializer()
@@ -39,35 +38,35 @@ class KtJwtCreator private constructor() {
         fun init(): Builder = Builder()
 
         private fun String.toJson(): JsonElement {
-            return json.toJson(S_STRING, this)
+            return json.encodeToJsonElement(S_STRING, this)
         }
 
         private fun Double.toJson(): JsonElement {
-            return json.toJson(S_DOUBLE, this)
+            return json.encodeToJsonElement(S_DOUBLE, this)
         }
 
         private fun Long.toJson(): JsonElement {
-            return json.toJson(S_LONG, this)
+            return json.encodeToJsonElement(S_LONG, this)
         }
 
         private fun Int.toJson(): JsonElement {
-            return json.toJson(S_INT, this)
+            return json.encodeToJsonElement(S_INT, this)
         }
 
         private fun Boolean.toJson(): JsonElement {
-            return json.toJson(S_BOOLEAN, this)
+            return json.encodeToJsonElement(S_BOOLEAN, this)
         }
 
         private fun Date.toJson(): JsonElement {
-            return json.toJson(DateSerializer, this)
+            return json.encodeToJsonElement(DateSerializer, this)
         }
 
         private fun LocalDateTime.toJson(): JsonElement {
-            return json.toJson(LocalDateTimeSerializer, this)
+            return json.encodeToJsonElement(LocalDateTimeSerializer, this)
         }
 
         private fun List<String>.toJson(): JsonElement {
-            return json.toJson(S_STRING_LIST, this)
+            return json.encodeToJsonElement(S_STRING_LIST, this)
         }
     }
 
@@ -80,8 +79,8 @@ class KtJwtCreator private constructor() {
         val headerJson = JsonObject(header).toString()
         val payloadJson = JsonObject(payload).toString()
 
-        val headerBytes = headerJson.toUtf8Bytes()
-        val payloadBytes = payloadJson.toUtf8Bytes()
+        val headerBytes = headerJson.toByteArray()
+        val payloadBytes = payloadJson.toByteArray()
 
         val tHeader = encoder.encodeToString(headerBytes)
         val tPayload = encoder.encodeToString(payloadBytes)
@@ -165,7 +164,7 @@ class KtJwtCreator private constructor() {
          * @return  The [Builder] instance.
          */
         fun <T> addClaim(key: String, value: T, serializer: KSerializer<T>) = this.apply {
-            jwt.payload[key] = json.toJson(serializer, value)
+            jwt.payload[key] = json.encodeToJsonElement(serializer, value)
         }
 
         /**

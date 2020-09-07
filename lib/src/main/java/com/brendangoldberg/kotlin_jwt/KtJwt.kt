@@ -32,7 +32,7 @@ data class KtJwt(
         try {
             val item = payload[key]
             if (item != null) {
-                return json.fromJson(serializer, item)
+                return json.decodeFromJsonElement(serializer, item)
             }
             return null
         } catch (e: Exception) {

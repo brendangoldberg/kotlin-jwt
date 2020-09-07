@@ -1,6 +1,10 @@
 package com.brendangoldberg.kotlin_jwt.serializers
 
 import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDateTime
 
 /**
@@ -8,8 +12,7 @@ import java.time.LocalDateTime
  */
 object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
 
-    override val descriptor: SerialDescriptor =
-        PrimitiveDescriptor(LocalDateTime::class.java.name, PrimitiveKind.STRING)
+    override val descriptor = PrimitiveSerialDescriptor(LocalDateTime::class.java.name, PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: LocalDateTime) {
         encoder.encodeString(value.toString())

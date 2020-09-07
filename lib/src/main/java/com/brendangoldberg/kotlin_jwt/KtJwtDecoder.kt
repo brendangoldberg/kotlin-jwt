@@ -1,7 +1,10 @@
 package com.brendangoldberg.kotlin_jwt
 
+import com.brendangoldberg.kotlin_jwt.KtJwtDecoder.json
 import com.brendangoldberg.kotlin_jwt.ext.toDate
-import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.*
+import kotlinx.serialization.parse
 import java.time.DateTimeException
 import java.time.Instant
 import java.time.LocalDateTime
@@ -20,33 +23,33 @@ object KtJwtDecoder {
         val parts = jwt.split(".")
         val strHeader = String(decoder.decode(parts[0]))
         val strPayload = String(decoder.decode(parts[1]))
-        val header = json.parseJson(strHeader).jsonObject
-        val payload = json.parseJson(strPayload).jsonObject
+        val header = json.parseToJsonElement(strHeader).jsonObject
+        val payload = json.parseToJsonElement(strPayload).jsonObject
 
         return KtJwt().apply {
             this.header = header
             this.payload = payload
 
             with(header) {
-                alg = this[Constants.ALGORITHM]?.contentOrNull
-                type = this[Constants.TYPE]?.contentOrNull
-                contentType = this[Constants.CONTENT_TYPE]?.contentOrNull
+                alg = this[Constants.ALGORITHM]?.jsonPrimitive?.contentOrNull
+                type = this[Constants.TYPE]?.jsonPrimitive?.contentOrNull
+                contentType = this[Constants.CONTENT_TYPE]?.jsonPrimitive?.contentOrNull
             }
             with(payload) {
-                issuer = this[Constants.ISSUER]?.contentOrNull
-                subject = this[Constants.SUBJECT]?.contentOrNull
+                issuer = this[Constants.ISSUER]?.jsonPrimitive?.contentOrNull
+                subject = this[Constants.SUBJECT]?.jsonPrimitive?.contentOrNull
 
                 this[Constants.AUDIENCE]?.jsonArray?.let {
                     val audiences = ArrayList<String>()
                     for (item in it) {
-                        item.contentOrNull?.let { t ->
+                        item.jsonPrimitive.contentOrNull?.let { t ->
                             audiences.add(t)
                         }
                     }
                     audience = audiences
                 }
 
-                this[Constants.EXPIRES_AT]?.contentOrNull?.let { text ->
+                this[Constants.EXPIRES_AT]?.jsonPrimitive?.contentOrNull?.let { text ->
                     try {
                         expiresAt = LocalDateTime.parse(text).toDate()
                     } catch (e: DateTimeException) {
@@ -58,7 +61,7 @@ object KtJwtDecoder {
                     }
                 }
 
-                this[Constants.NOT_BEFORE]?.contentOrNull?.let { text ->
+                this[Constants.NOT_BEFORE]?.jsonPrimitive?.contentOrNull?.let { text ->
                     try {
                         notBefore = LocalDateTime.parse(text).toDate()
                     } catch (e: DateTimeException) {
@@ -70,7 +73,7 @@ object KtJwtDecoder {
                     }
                 }
 
-                this[Constants.ISSUED_AT]?.contentOrNull?.let { text ->
+                this[Constants.ISSUED_AT]?.jsonPrimitive?.contentOrNull?.let { text ->
                     try {
                         issuedAt = LocalDateTime.parse(text).toDate()
                     } catch (e: DateTimeException) {
@@ -82,7 +85,7 @@ object KtJwtDecoder {
                     }
                 }
 
-                jwtId = this[Constants.JWT_ID]?.contentOrNull
+                jwtId = this[Constants.JWT_ID]?.jsonPrimitive?.contentOrNull
             }
         }
     }

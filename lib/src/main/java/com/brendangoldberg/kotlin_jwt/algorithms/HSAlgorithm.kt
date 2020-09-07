@@ -1,7 +1,6 @@
 package com.brendangoldberg.kotlin_jwt.algorithms
 
 import com.brendangoldberg.kotlin_jwt.Utils
-import kotlinx.serialization.toUtf8Bytes
 
 /**
  * HMAC instance of an [Algorithm]
@@ -68,14 +67,14 @@ class HSAlgorithm private constructor(
     override fun sign(header: String, payload: String): String {
         return Utils.sign(
             algorithm,
-            secret.toUtf8Bytes(),
+            secret.toByteArray(),
             header,
             payload
         )
     }
 
     override fun verify(header: String, payload: String, signature: String): Boolean {
-        return Utils.verify(algorithm, secret.toUtf8Bytes(), header, payload, signature)
+        return Utils.verify(algorithm, secret.toByteArray(), header, payload, signature)
 
     }
 
