@@ -36,8 +36,7 @@ fun main() {
     println("verified: $verified")
 
     // Decode JWT
-    val decoder = KtJwtDecoder()
-    decoder.decode(jwt)
+    val decoded = KtJwtDecoder.decode(jwt)
 
     println("custom claim: ${decoder.getClaim("custom_claim", CustomClaim.serializer())}")
 }
