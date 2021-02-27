@@ -5,7 +5,6 @@ import com.brendangoldberg.kotlin_jwt.serializers.DateSerializer
 import com.brendangoldberg.kotlin_jwt.serializers.LocalDateTimeSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.list
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject

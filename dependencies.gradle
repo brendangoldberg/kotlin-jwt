@@ -1,7 +1,7 @@
 ext {
 
-    kotlin = "1.4.0"
-    serialize = "1.0.0-RC"
+    kotlin = "1.4.30"
+    serialize = "1.1.0"
     dokka = "0.10.0"
     bintray = "1.8.5"
     shadow = "6.0.0"
@@ -17,7 +17,7 @@ deps.kotlin.gradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin"
 deps.kotlin.jdk = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin"
 deps.kotlin.serialization = [:]
 deps.kotlin.serialization.gradle = "org.jetbrains.kotlin:kotlin-serialization:$kotlin"
-deps.kotlin.serialization.runtime = "org.jetbrains.kotlinx:kotlinx-serialization-core:$serialize"
+deps.kotlin.serialization.runtime = "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialize"
 
 deps.dokka = "org.jetbrains.dokka:dokka-gradle-plugin:$dokka"
 
