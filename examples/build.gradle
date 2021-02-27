@@ -28,7 +28,7 @@ compileTestKotlin {
 }
 
 dependencies {
-    implementation "com.brendangoldberg:kotlin-jwt:0.2.0"
+    implementation "com.brendangoldberg:kotlin-jwt:1.0.0"
     implementation deps.kotlin.jdk
     implementation deps.kotlin.serialization.runtime
 }
