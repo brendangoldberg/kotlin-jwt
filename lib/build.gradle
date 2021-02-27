@@ -5,7 +5,7 @@ apply plugin: "org.jetbrains.dokka"
 apply plugin: "jacoco"
 
 group "com.brendangoldberg"
-version "1.0.0"
+version "1.1.0"
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
