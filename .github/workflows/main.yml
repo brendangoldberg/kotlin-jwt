@@ -1,0 +1,18 @@
+on:
+  pull_request:
+    branches:
+      - develop
+    types: [ closed ]
+
+jobs:
+  test:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    name: create tag
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Minimul Tag Creator
+        uses: MinimulDev/tag-creator@0.1.2
+        with:
+          skip_ci: false
