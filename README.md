@@ -1,9 +1,9 @@
 ## Kotlin JWT Library
 
-[ ![Download](https://api.bintray.com/packages/brendangoldberg/com.brendangoldberg/kotlin-jwt/images/download.svg) ](https://bintray.com/brendangoldberg/com.brendangoldberg/kotlin-jwt/_latestVersion)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This is a JSON Web Token (JWT) library written fully in Kotlin utilizing [Kotlin Serializer](https://github.com/Kotlin/kotlinx.serialization).
+This is a JSON Web Token (JWT) library written fully in Kotlin
+utilizing [Kotlin Serializer](https://github.com/Kotlin/kotlinx.serialization).
 
 For introduction to JWTs please visit [https://jwt.io/introduction/](https://jwt.io/introduction/).
 
@@ -53,12 +53,16 @@ fun main() {
 
 #### Gradle
 
-```
-repositories {
-    mavenCentral()
+All versions can be found in the [maven repo](https://repo1.maven.org/maven2/com/brendangoldberg/kotlin-jwt/), or [maven search](https://search.maven.org/search?q=g:com.brendangoldberg%20AND%20a:kotlin-jwt).
+
+```kotlin
+repositories { 
+  mavenCentral()
 }
 
 dependencies {
-    implementation "com.brendangoldberg.kotlin-jwt:<latest-version>"
+  implementation("com.brendangoldberg.kotlin-jwt:<latest-version>")
+
 }
+
 ```
