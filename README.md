@@ -1,9 +1,9 @@
 ## Kotlin JWT Library
 
-[ ![Download](https://api.bintray.com/packages/brendangoldberg/com.brendangoldberg/kotlin-jwt/images/download.svg) ](https://bintray.com/brendangoldberg/com.brendangoldberg/kotlin-jwt/_latestVersion)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This is a JSON Web Token (JWT) library written fully in Kotlin utilizing [Kotlin Serializer](https://github.com/Kotlin/kotlinx.serialization).
+This is a JSON Web Token (JWT) library written fully in Kotlin
+utilizing [Kotlin Serializer](https://github.com/Kotlin/kotlinx.serialization).
 
 For introduction to JWTs please visit [https://jwt.io/introduction/](https://jwt.io/introduction/).
 
@@ -16,13 +16,20 @@ For introduction to JWTs please visit [https://jwt.io/introduction/](https://jwt
 
 ```kotlin
 
+import com.brendangoldberg.kotlin_jwt.KtJwtCreator
+import com.brendangoldberg.kotlin_jwt.KtJwtDecoder
+import com.brendangoldberg.kotlin_jwt.KtJwtVerifier
+import com.brendangoldberg.kotlin_jwt.algorithms.HSAlgorithm
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 @Serializable
 data class CustomClaim(
     @SerialName("my_custom_value") val customValue: String
 )
 
 fun main() {
-    // Declare which signing algorithm to use see com.brendangoldberg.kotlin_jwt.algorithms.* for available algorithms.
+    // Declare which signing algorithm to use see import com.brendangoldberg.kotlin_jwt.algorithms.* for available algorithms.
     val algorithm = HSAlgorithm.HS256("my-super-secret")
 
     val customClaim = CustomClaim("myCustomClaim")
@@ -38,7 +45,7 @@ fun main() {
     // Decode JWT
     val decoded = KtJwtDecoder.decode(jwt)
 
-    println("custom claim: ${decoder.getClaim("custom_claim", CustomClaim.serializer())}")
+    println("custom claim: ${decoded.getClaim("custom_claim", CustomClaim.serializer())}")
 }
 ```
 
@@ -46,17 +53,16 @@ fun main() {
 
 #### Gradle
 
-```
-repositories {
-    // published to JCenter
-    jcenter()
+All versions can be found in the [maven repo](https://repo1.maven.org/maven2/com/brendangoldberg/kotlin-jwt/), or [maven search](https://search.maven.org/search?q=g:com.brendangoldberg%20AND%20a:kotlin-jwt).
+
+```kotlin
+repositories { 
+  mavenCentral()
 }
 
 dependencies {
-    implementation "com.brendangoldberg.kotlin-jwt:<latest-version>"
+  implementation("com.brendangoldberg.kotlin-jwt:<latest-version>")
+
 }
+
 ```
-
-### Important Notes
-
-- This library is still in pre-release mode, and should not be used in production until release tag's are not marked as "pre-release".
