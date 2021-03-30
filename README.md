@@ -16,13 +16,20 @@ For introduction to JWTs please visit [https://jwt.io/introduction/](https://jwt
 
 ```kotlin
 
+import com.brendangoldberg.kotlin_jwt.KtJwtCreator
+import com.brendangoldberg.kotlin_jwt.KtJwtDecoder
+import com.brendangoldberg.kotlin_jwt.KtJwtVerifier
+import com.brendangoldberg.kotlin_jwt.algorithms.HSAlgorithm
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 @Serializable
 data class CustomClaim(
     @SerialName("my_custom_value") val customValue: String
 )
 
 fun main() {
-    // Declare which signing algorithm to use see com.brendangoldberg.kotlin_jwt.algorithms.* for available algorithms.
+    // Declare which signing algorithm to use see import com.brendangoldberg.kotlin_jwt.algorithms.* for available algorithms.
     val algorithm = HSAlgorithm.HS256("my-super-secret")
 
     val customClaim = CustomClaim("myCustomClaim")
@@ -38,7 +45,7 @@ fun main() {
     // Decode JWT
     val decoded = KtJwtDecoder.decode(jwt)
 
-    println("custom claim: ${decoder.getClaim("custom_claim", CustomClaim.serializer())}")
+    println("custom claim: ${decoded.getClaim("custom_claim", CustomClaim.serializer())}")
 }
 ```
 
@@ -48,15 +55,10 @@ fun main() {
 
 ```
 repositories {
-    // published to JCenter
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
     implementation "com.brendangoldberg.kotlin-jwt:<latest-version>"
 }
 ```
-
-### Important Notes
-
-- This library is still in pre-release mode, and should not be used in production until release tag's are not marked as "pre-release".
