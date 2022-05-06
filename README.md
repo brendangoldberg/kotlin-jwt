@@ -61,8 +61,6 @@ repositories {
 }
 
 dependencies {
-  implementation("com.brendangoldberg.kotlin-jwt:<latest-version>")
-
+  implementation("com.brendangoldberg:kotlin-jwt:<latest-version>")
 }
-
 ```
